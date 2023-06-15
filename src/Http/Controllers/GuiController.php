@@ -123,10 +123,11 @@ class GuiController extends Controller {
 
     }
 
-    protected function optionsToArray(Command $command): ?array {
+    protected function optionsToArray(Command $command): ?array
+    {
         $definition = $command->getDefinition();
 
-        $options = array_map(function (InputOption $option) {
+        $options = array_merge(array_map(function (InputOption $option) {
             return [
                 'title' => Str::of($option->getName())->snake()->replace('_', ' ')->title()->__toString(),
                 'name' => $option->getName(),
@@ -137,7 +138,18 @@ class GuiController extends Controller {
                 'accept_value' => $option->acceptValue(),
                 'default' => empty($default = $option->getDefault()) ? null : $default,
             ];
-        }, $definition->getOptions());
+        }, $definition->getOptions()), [
+            'env' => [
+                'title' => 'Environment',
+                'name' => 'env',
+                'description' => 'The environment the command should run under',
+                'shortcut' => null,
+                'required' => true,
+                'array' => false,
+                'accept_value' => true,
+                'default' => null,
+            ]
+        ]);
 
         return empty($options) ? null : $options;
     }

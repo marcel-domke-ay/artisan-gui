@@ -61,7 +61,7 @@ class GuiController extends Controller
 
             $params[$key] = $value;
         }
-
+        $params['--no-ansi'] = '';
         $output = new BufferedOutput(BufferedOutput::VERBOSITY_NORMAL, true);
 
         try {
